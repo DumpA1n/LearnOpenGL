@@ -32,7 +32,8 @@ void main() {
     vec3 result = (ambient + diffuse) * objectColor;
     FragColor = vec4(result, 1.0);
 
-    // FragColor = mix(texture(texture0, TexCoord), texture(texture1, TexCoord), 0.2 + visibility) * vec4(result, 1.0);
+    // FragColor = texture(texture0, TexCoord) * vec4(result, 1.0);
+    FragColor = mix(texture(texture0, TexCoord), texture(texture1, TexCoord), 0.2 + visibility) * vec4(result, 1.0);
     // FragColor = ourColor;
     // FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
 }

@@ -1,6 +1,4 @@
 #pragma once
-#ifndef SHADER_H
-#define SHADER_H
 
 #include "utils/FrameBuffer.h"
 
@@ -11,10 +9,14 @@ public:
     GLuint VAO;
     GLuint EBO;
     float lastFrame;
+    float visibility = 0.2;
 
-    Shader(const char *vertexShaderSource, const char* fragmentShaderSource);
+    Shader(const char* vertexShaderSource, const char* fragmentShaderSource);
+    ~Shader() {}
     void use();
     void draw();
+    void drawElements(GLenum mode, GLsizei count, GLenum type, const void *indices);
+    void drawArray(GLenum mode, GLint first, GLsizei count);
     void set1i(const char *name, GLint v0);
     void set1f(const char *name, GLfloat v0);
     void set2f(const char *name, GLfloat v0, GLfloat v1);
@@ -30,11 +32,10 @@ public:
     void setMatrix3fv(const char *name, const GLfloat *value);
     void setMatrix4fv(const char *name, GLsizei count, GLboolean transpose, const GLfloat *value);
     void setMatrix4fv(const char *name, const GLfloat *value);
-    void setSampler(const char *name, Texture* texture);
+    void setSampler(const char *name, const Texture* texture);
     void setVertexData(float *vertices, size_t size = 80);
     void setVertexData();
     float getDeltaTime();
-    ~Shader() {}
 };
 
 Shader::Shader(const char *vertexShaderSource, const char *fragmentShaderSource) {
@@ -44,7 +45,7 @@ Shader::Shader(const char *vertexShaderSource, const char *fragmentShaderSource)
             strstr(filename, ".vert") || strstr(filename, ".frag")) {
             FILE* fp = fopen(filename, "r");
             if (!fp) {
-                std::cerr << "Failed to open file" << std::endl;
+                std::cerr << "Compile Shader Error: Failed to open file" << std::endl;
             }
             char line[512];
             std::string result;
@@ -118,6 +119,18 @@ void Shader::draw() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+void Shader::drawElements(GLenum mode, GLsizei count, GLenum type, const void *indices) {
+    glBindVertexArray(VAO);
+    glDrawElements(mode, count, type, indices);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void Shader::drawArray(GLenum mode, GLint first, GLsizei count) {
+    glBindVertexArray(VAO);
+    glDrawArrays(mode, first, count);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
 void Shader::set1i(const char *name, GLint v0) {
     glUniform1i(glGetUniformLocation(program, name), v0);
 }
@@ -169,8 +182,8 @@ void Shader::setMatrix4fv(const char *name, const GLfloat *value) {
     glUniformMatrix4fv(glGetUniformLocation(program, name), 1, GL_FALSE, value);
 }
 
-void Shader::setSampler(const char *name, Texture* texture) {
-    Shader::set1i(name, texture->index);
+void Shader::setSampler(const char *name, const Texture* texture) {
+    set1i(name, texture->index);
     glActiveTexture(GL_TEXTURE0 + texture->index);
     glBindTexture(GL_TEXTURE_2D, texture->id);
 }
@@ -197,5 +210,3 @@ float Shader::getDeltaTime() {
     lastFrame = curTime;
     return deltaTime;
 }
-
-#endif // SHADER_H

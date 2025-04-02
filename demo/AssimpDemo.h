@@ -1,8 +1,7 @@
 #pragma once
-#ifndef ASSIMPDEMO_H
-#define ASSIMPDEMO_H
 
 #include "utils/Shader.h"
+// #include "utils/Shader_old.h"
 #include "utils/Camera.h"
 #include "utils/Model.h"
 
@@ -22,5 +21,3 @@ void RenderModel(GLFWwindow* window, Shader& shader, Model& _model) {
     shader.setMatrix4fv("projection", projection);
     _model.Draw(shader);
 }
-
-#endif

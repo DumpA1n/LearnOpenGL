@@ -1,10 +1,10 @@
 #pragma once
-#ifndef TEXTURE_H
-#define TEXTURE_H
 
 #include <iostream>
 #include <cstdio>
-#include <unistd.h>
+#ifdef ____MACOS____
+    #include <unistd.h>
+#endif
 #include <string>
 #include <map>
 #include <unordered_map>
@@ -15,14 +15,17 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
+static int texture_index = 0;
+
 class Texture {
 public:
     uint32_t id;
-    int index;
     int width;
     int height;
     int nrChannels;
+    int index;
     Texture() {
+        index = texture_index++;
         glGenTextures(1, &id);
         glBindTexture(GL_TEXTURE_2D, id);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, screenWidth, screenHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
@@ -30,6 +33,7 @@ public:
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, id, 0);
     }
     Texture(const char* filename) {
+        index = texture_index++;
         glGenTextures(1, &id);
         glBindTexture(GL_TEXTURE_2D, id);
         setTexParament(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
@@ -56,7 +60,4 @@ public:
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, MIN_FILTER);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, MAG_FILTER);
     }
-    ~Texture();
 };
-
-#endif // TEXTURE_H

@@ -1,8 +1,7 @@
 #pragma once
-#ifndef DRAWSHAPE_H
-#define DRAWSHAPE_H
 
-#include "Shader/Shader.h"
+#include "utils/Shader.h"
+// #include "utils/Shader_old.h"
 
 #ifdef _WIN32
     #define u_char unsigned char
@@ -149,8 +148,8 @@ void DrawRectangle(GLFWwindow* window) {
         glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(7 * sizeof(float)));
         glEnableVertexAttribArray(2);
 
-        obj->newTexture("container.jpg", GL_CLAMP_TO_EDGE, GL_CLAMP_TO_BORDER, GL_NEAREST, GL_NEAREST, GL_RGB, false);
-        obj->newTexture("awesomeface.png", GL_MIRRORED_REPEAT, GL_REPEAT, GL_LINEAR, GL_LINEAR, GL_RGBA, true);
+        obj->newTexture("../res/container.jpg", GL_CLAMP_TO_EDGE, GL_CLAMP_TO_BORDER, GL_NEAREST, GL_NEAREST, GL_RGB, false);
+        obj->newTexture("../res/awesomeface.png", GL_MIRRORED_REPEAT, GL_REPEAT, GL_LINEAR, GL_LINEAR, GL_RGBA, true);
         shader->use();
         shader->set1i("texture0", 0);
         shader->set1i("texture1", 1);
@@ -167,7 +166,7 @@ void DrawRectangle(GLFWwindow* window) {
     shader->setMatrix4fv("transform", 1, GL_FALSE, glm::value_ptr(trans));
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, obj->getTexture("container.jpg")->texture);
+    glBindTexture(GL_TEXTURE_2D, obj->getTexture("../res/container.jpg")->texture);
     if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
         shader->visibility = (shader->visibility + 0.01f > 1.0f ? 1.0f : shader->visibility + 0.01f);
     } else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
@@ -175,7 +174,7 @@ void DrawRectangle(GLFWwindow* window) {
     }
     shader->set1f("visibility", shader->visibility);
     glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, obj->getTexture("awesomeface.png")->texture);
+    glBindTexture(GL_TEXTURE_2D, obj->getTexture("../res/awesomeface.png")->texture);
 
     glBindVertexArray(obj->VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -450,5 +449,3 @@ void test3_DrawTwoTrianglesDiffShader() {
     glBindVertexArray(TTri2.VAO);
     glDrawArrays(GL_TRIANGLES, 3, 3);
 }
-
-#endif

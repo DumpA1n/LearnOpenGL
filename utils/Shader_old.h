@@ -1,10 +1,10 @@
 #pragma once
-#ifndef SHADER_H
-#define SHADER_H
 
 #include <iostream>
 #include <cstdio>
-#include <unistd.h>
+#ifdef ____APPLE____
+    #include <unistd.h>
+#endif
 #include <string>
 #include <map>
 #include <unordered_map>
@@ -205,5 +205,3 @@ Shader::ObjectInfo::TextureInfo* Shader::ObjectInfo::getTexture(std::string texn
     std::advance(it, index);
     return (it != texmap.end()) ? it->second : nullptr;
 }
-
-#endif

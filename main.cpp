@@ -12,9 +12,10 @@ int screenWidth = 1200;
 int screenHeight = 800;
 
 // #include "demo/DrawShape.h"
-// #include "demo/Draw3D.h"
-// #include "demo/Colors.h"
+#include "demo/Draw3D.h"
+#include "demo/Colors.h"
 // #include "demo/RenderText.h"
+#include "demo/Draw3D_Demo.h"
 #include "utils/Camera.h"
 #include "utils/MTFilter.h"
 
@@ -163,9 +164,10 @@ int main()
             ImGui::End();
         }
 
-        render_demo();
-        // DrawLight(window);
-        // Draw3DGraphic(window);
+        // render_demo();
+        // DrawCube();
+        DrawLight(window);
+        Draw3DGraphic(window);
 
         ImGui::Render();
         int display_w, display_h;

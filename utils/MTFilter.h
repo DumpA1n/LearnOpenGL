@@ -3,6 +3,7 @@
 #define MTFILTER_H
 
 #include "utils/Shader.h"
+// #include "utils/Shader_old.h"
 
 class MTFilter {
 public:
@@ -53,9 +54,9 @@ void Initialize() {
     MTFilter.newFrameBuffer("fba");
     MTFilter.newFrameBuffer("fbb");
     MTFilter.newFrameBuffer("fbc");
-    MTFilter.newTexture("box", "container.jpg");
+    MTFilter.newTexture("box", "../res/container.jpg");
     MTFilter.getTexture("box")->setTexParament(GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER);
-    MTFilter.newTexture("face", "awesomeface.png");
+    MTFilter.newTexture("face", "../res/awesomeface.png");
     MTFilter.getTexture("face")->setTexParament(GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER);
     MTFilter.IsInit = true;
 }

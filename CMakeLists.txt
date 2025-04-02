@@ -4,11 +4,13 @@ cmake_minimum_required(VERSION 3.10)
 project(test)
 
 # 指定 C++ 标准
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 # 查找并链接必要的库
-find_package(BZip2 REQUIRED)
-find_package(ZLIB REQUIRED)
+if (APPLE)
+    find_package(BZip2 REQUIRED)
+    find_package(ZLIB REQUIRED)
+endif()
 
 # 查找头文件
 include_directories("${CMAKE_SOURCE_DIR}")

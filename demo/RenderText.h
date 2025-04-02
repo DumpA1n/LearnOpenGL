@@ -1,6 +1,4 @@
 #pragma once
-#ifndef RENDERTEXT_H
-#define RENDERTEXT_H
 
 #include <algorithm>
 
@@ -9,8 +7,9 @@
 #include "imgui_impl_opengl3.h"
 #include "imgui_internal.h"
 
-#include "Shader/Shader.h"
-#include "Camera/Camera.h"
+#include "utils/Shader.h"
+// #include "utils/Shader_old.h"
+#include "utils/Camera.h"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -356,5 +355,3 @@ void RenderText(std::string text, glm::vec3 pos, glm::vec4 color, GLfloat scale,
     }
     glDepthMask(GL_TRUE);
 }
-
-#endif
