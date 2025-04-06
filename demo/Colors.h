@@ -12,6 +12,7 @@
 #include "utils/Shader.h"
 #include "utils/Camera.h"
 #include "utils/Texture.h"
+#include "RenderText.h"
 
 #include "utils/Rectangle.h"
 

@@ -2,28 +2,54 @@
 
 #include <algorithm>
 
+#include "include/glad/glad.h"
+#include "include/GLFW/glfw3.h"
+
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "imgui_internal.h"
 
 #include "utils/Shader.h"
-// #include "utils/Shader_old.h"
 #include "utils/Camera.h"
+#include "utils/Object.h"
 
 #include <ft2build.h>
+#include <freetype/freetype.h>
 #include FT_FREETYPE_H
 
 #include "stb/stb_truetype.h"
 
-struct Font {
+extern int screenWidth, screenHeight;
 
-    struct Character {
-        GLuint     TexID;
-        glm::ivec2 Size;
-        glm::ivec2 Bearing;
-        GLuint     Advance;
-    };
+struct Character : Object {
+public:
+    GLuint     TexID;
+    glm::ivec2 Size;
+    glm::ivec2 Bearing;
+    GLuint     Advance;
+    Character() {
+        GLuint indices[2][3] = {
+            0, 1, 3,
+            1, 2, 3
+        };
+        glGenVertexArrays(1, &VAO);
+        glBindVertexArray(VAO);
+        glGenBuffers(1, &VBO);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER, 6 * 4 * sizeof(float), nullptr, GL_DYNAMIC_DRAW);
+        glGenBuffers(1, &EBO);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)0);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(3 * sizeof(float)));
+        glEnableVertexAttribArray(1);
+    }
+    Character(GLuint texID, glm::ivec2 size, glm::ivec2 bearing, GLuint advance) : TexID(texID), Size(size), Bearing(bearing), Advance(advance) {}
+};
+
+struct Font {
     std::map<uint32_t, Character*> chmap;
 
     void AddFontFromFileTTF(const char* filename, FT_UInt pixel_width, FT_UInt pixel_height, bool use_sdf) {
@@ -59,11 +85,12 @@ struct Font {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-            auto character = new Character();
-            character->TexID = texture;
-            character->Size = glm::ivec2(slot->bitmap.width, slot->bitmap.rows);
-            character->Bearing = glm::ivec2(slot->bitmap_left, slot->bitmap_top);
-            character->Advance = std::max(advancex, (int)slot->advance.x);
+            auto character = new Character{
+                texture,
+                glm::ivec2(slot->bitmap.width, slot->bitmap.rows),
+                glm::ivec2(slot->bitmap_left, slot->bitmap_top),
+                std::max((GLuint)advancex, (GLuint)slot->advance.x)
+            };
             chmap.insert({ch, character});
         }
         FT_Done_Face(face);
@@ -89,39 +116,9 @@ glm::vec3 text_scale(1.0f, 1.0f, 1.0f);
 
 void RenderText(std::string text, glm::vec2 pos, glm::vec4 color, GLfloat scale, bool use_sdf) {
     glDepthMask(GL_FALSE);
-    Shader *shader = (use_sdf ? cshader_sdf.get() : cshader_smooth.get());
-    if (!shader) {
-        if (use_sdf) {
-            cshader_sdf = std::make_unique<Shader>("../res/CharacterShader.vs", "../res/CharacterShaderSDF.fs");
-        } else {
-            cshader_smooth = std::make_unique<Shader>("../res/CharacterShader.vs", "../res/CharacterShaderSmooth.fs");
-        }
-    }
-    shader = (use_sdf ? cshader_sdf.get() : cshader_smooth.get());
-    if (shader->getObject("character") == nullptr) {
-        shader->newObject("character");
-    }
-    Shader::ObjectInfo *obj = shader->getObject("character");
-    if (!obj->init) {
-        GLuint indices[2][3] = {
-            0, 1, 3,
-            1, 2, 3
-        };
-        glGenVertexArrays(1, &obj->VAO);
-        glBindVertexArray(obj->VAO);
-        glGenBuffers(1, &obj->VBO);
-        glBindBuffer(GL_ARRAY_BUFFER, obj->VBO);
-        glBufferData(GL_ARRAY_BUFFER, 6 * 4 * sizeof(float), nullptr, GL_DYNAMIC_DRAW);
-        glGenBuffers(1, &obj->EBO);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, obj->EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)0);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(3 * sizeof(float)));
-        glEnableVertexAttribArray(1);
-
-        obj->init = true;
-    }
+    std::unique_ptr<Shader> shader = use_sdf ? std::make_unique<Shader>("../res/shader/CharacterShader.vs", "../res/shader/CharacterShaderSDF.fs")
+                                             : std::make_unique<Shader>("../res/shader/CharacterShaderSmooth.vs", "../res/shader/CharacterShaderSmooth.fs");
+    std::shared_ptr<Character> character = std::make_shared<Character>();
 
     // glm::mat4 model = glm::mat4(1.0f);
     //           model = glm::scale(model, text_scale);
@@ -139,13 +136,12 @@ void RenderText(std::string text, glm::vec2 pos, glm::vec4 color, GLfloat scale,
     shader->setMatrix4fv("projection", 1, GL_FALSE, glm::value_ptr(projection));
 
     glActiveTexture(GL_TEXTURE0);
-    glBindVertexArray(obj->VAO);
+    glBindVertexArray(character->VAO);
 
     // pos.y = screenHeight - pos.y;
 
     for (const auto& c : text) {
-        auto ch = font.chmap[c];
-        if (use_sdf) ch = font_sdf.chmap[c];
+        auto ch = use_sdf ? font_sdf.chmap[c] : font.chmap[c];
 
         GLfloat x = pos.x + ch->Bearing.x * scale;
         GLfloat y = pos.y - (ch->Size.y - ch->Bearing.y) * scale;
@@ -167,7 +163,7 @@ void RenderText(std::string text, glm::vec2 pos, glm::vec4 color, GLfloat scale,
         };
 
         glBindTexture(GL_TEXTURE_2D, ch->TexID);
-        glBindBuffer(GL_ARRAY_BUFFER, obj->VBO);
+        glBindBuffer(GL_ARRAY_BUFFER, character->VBO);
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
 
@@ -183,175 +179,175 @@ void RenderText(std::string text, glm::vec2 pos, glm::vec4 color, GLfloat scale,
 
 
 
-void RenderText(std::string text, glm::vec2 pos, glm::vec4 color, GLfloat scale) {
-    glDepthMask(GL_FALSE);
-    Shader *shader = cshader.get();
-    if (!shader) {
-        cshader = std::make_unique<Shader>("../res/CharacterShader.vs", "../res/CharacterShader.fs");
-    }
-    shader = cshader.get();
-    if (shader->getObject("character") == nullptr) {
-        shader->newObject("character");
-    }
-    Shader::ObjectInfo *obj = shader->getObject("character");
-    if (!obj->init) {
-        GLuint indices[2][3] = {
-            0, 1, 3,
-            1, 2, 3
-        };
-        glGenVertexArrays(1, &obj->VAO);
-        glBindVertexArray(obj->VAO);
-        glGenBuffers(1, &obj->VBO);
-        glBindBuffer(GL_ARRAY_BUFFER, obj->VBO);
-        glBufferData(GL_ARRAY_BUFFER, 6 * 4 * sizeof(float), nullptr, GL_DYNAMIC_DRAW);
-        glGenBuffers(1, &obj->EBO);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, obj->EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)0);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(3 * sizeof(float)));
-        glEnableVertexAttribArray(1);
+// void RenderText(std::string text, glm::vec2 pos, glm::vec4 color, GLfloat scale) {
+//     glDepthMask(GL_FALSE);
+//     Shader *shader = cshader.get();
+//     if (!shader) {
+//         cshader = std::make_unique<Shader>("../res/CharacterShader.vs", "../res/CharacterShader.fs");
+//     }
+//     shader = cshader.get();
+//     if (shader->getObject("character") == nullptr) {
+//         shader->newObject("character");
+//     }
+//     Shader::ObjectInfo *obj = shader->getObject("character");
+//     if (!obj->init) {
+//         GLuint indices[2][3] = {
+//             0, 1, 3,
+//             1, 2, 3
+//         };
+//         glGenVertexArrays(1, &obj->VAO);
+//         glBindVertexArray(obj->VAO);
+//         glGenBuffers(1, &obj->VBO);
+//         glBindBuffer(GL_ARRAY_BUFFER, obj->VBO);
+//         glBufferData(GL_ARRAY_BUFFER, 6 * 4 * sizeof(float), nullptr, GL_DYNAMIC_DRAW);
+//         glGenBuffers(1, &obj->EBO);
+//         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, obj->EBO);
+//         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW);
+//         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)0);
+//         glEnableVertexAttribArray(0);
+//         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(3 * sizeof(float)));
+//         glEnableVertexAttribArray(1);
 
-        obj->init = true;
-    }
+//         obj->init = true;
+//     }
 
-    glm::mat4 model = glm::mat4(1.0f);
-              model = glm::translate(model, lightPos);
-    glm::mat4 view = camera.GetViewMatrix();
-    glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)screenWidth / (float)screenHeight, 0.1f, 100.0f);
+//     glm::mat4 model = glm::mat4(1.0f);
+//               model = glm::translate(model, lightPos);
+//     glm::mat4 view = camera.GetViewMatrix();
+//     glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)screenWidth / (float)screenHeight, 0.1f, 100.0f);
 
-    shader->use();
-    shader->set1f("time", (float)glfwGetTime());
-    shader->set4fv("textColor", 1, glm::value_ptr(color));
-    shader->setMatrix4fv("projection", 1, GL_FALSE, glm::value_ptr(projection));
-    shader->setMatrix4fv("model", 1, GL_FALSE, glm::value_ptr(model));
-    shader->setMatrix4fv("view", 1, GL_FALSE, glm::value_ptr(view));
+//     shader->use();
+//     shader->set1f("time", (float)glfwGetTime());
+//     shader->set4fv("textColor", 1, glm::value_ptr(color));
+//     shader->setMatrix4fv("projection", 1, GL_FALSE, glm::value_ptr(projection));
+//     shader->setMatrix4fv("model", 1, GL_FALSE, glm::value_ptr(model));
+//     shader->setMatrix4fv("view", 1, GL_FALSE, glm::value_ptr(view));
 
-    glActiveTexture(GL_TEXTURE0);
-    glBindVertexArray(obj->VAO);
+//     glActiveTexture(GL_TEXTURE0);
+//     glBindVertexArray(obj->VAO);
 
-    // pos.y = screenHeight - pos.y;
+//     // pos.y = screenHeight - pos.y;
 
-    for (const auto& c : text) {
-        auto ch = font.chmap[c];
-        ch = font.chmap[c];
+//     for (const auto& c : text) {
+//         auto ch = font.chmap[c];
+//         ch = font.chmap[c];
 
-        GLfloat x = pos.x + ch->Bearing.x * scale;
-        GLfloat y = pos.y - (ch->Size.y - ch->Bearing.y) * scale;
-        GLfloat w = ch->Size.x * scale;
-        GLfloat h = ch->Size.y * scale;
+//         GLfloat x = pos.x + ch->Bearing.x * scale;
+//         GLfloat y = pos.y - (ch->Size.y - ch->Bearing.y) * scale;
+//         GLfloat w = ch->Size.x * scale;
+//         GLfloat h = ch->Size.y * scale;
 
-        x /= screenWidth;
-        y /= screenHeight;
-        w /= screenWidth;
-        h /= screenHeight;
+//         x /= screenWidth;
+//         y /= screenHeight;
+//         w /= screenWidth;
+//         h /= screenHeight;
         
-        GLfloat vertices[] = {
-            x,     y + h, 0.0f,  0.0f, 0.0f , // 左下
-            x,     y,     0.0f,  0.0f, 1.0f , // 左上
-            x + w, y,     0.0f,  1.0f, 1.0f , // 右上
-            x + w, y + h, 0.0f,  1.0f, 0.0f   // 右下
-        };
+//         GLfloat vertices[] = {
+//             x,     y + h, 0.0f,  0.0f, 0.0f , // 左下
+//             x,     y,     0.0f,  0.0f, 1.0f , // 左上
+//             x + w, y,     0.0f,  1.0f, 1.0f , // 右上
+//             x + w, y + h, 0.0f,  1.0f, 0.0f   // 右下
+//         };
 
-        glBindTexture(GL_TEXTURE_2D, ch->TexID);
-        glBindBuffer(GL_ARRAY_BUFFER, obj->VBO);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
+//         glBindTexture(GL_TEXTURE_2D, ch->TexID);
+//         glBindBuffer(GL_ARRAY_BUFFER, obj->VBO);
+//         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+//         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
 
-        pos.x += (ch->Advance >> 6) * scale;
-    }
-    glDepthMask(GL_TRUE);
-}
-
-
+//         pos.x += (ch->Advance >> 6) * scale;
+//     }
+//     glDepthMask(GL_TRUE);
+// }
 
 
 
 
 
 
-void RenderText(std::string text, glm::vec3 pos, glm::vec4 color, GLfloat scale, bool use_sdf) {
-    glDepthMask(GL_FALSE);
-    Shader *shader = (use_sdf ? cshader_sdf.get() : cshader_smooth.get());
-    if (!shader) {
-        if (use_sdf) {
-            cshader_sdf = std::make_unique<Shader>("../res/CharacterShader.vs", "../res/CharacterShaderSDF.fs");
-        } else {
-            cshader_smooth = std::make_unique<Shader>("../res/CharacterShader.vs", "../res/CharacterShaderSmooth.fs");
-        }
-    }
-    shader = (use_sdf ? cshader_sdf.get() : cshader_smooth.get());
-    if (shader->getObject("character") == nullptr) {
-        shader->newObject("character");
-    }
-    Shader::ObjectInfo *obj = shader->getObject("character");
-    if (!obj->init) {
-        GLuint indices[2][3] = {
-            0, 1, 3,
-            1, 2, 3
-        };
-        glGenVertexArrays(1, &obj->VAO);
-        glBindVertexArray(obj->VAO);
-        glGenBuffers(1, &obj->VBO);
-        glBindBuffer(GL_ARRAY_BUFFER, obj->VBO);
-        glBufferData(GL_ARRAY_BUFFER, 6 * 4 * sizeof(float), nullptr, GL_DYNAMIC_DRAW);
-        glGenBuffers(1, &obj->EBO);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, obj->EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)0);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(3 * sizeof(float)));
-        glEnableVertexAttribArray(1);
 
-        obj->init = true;
-    }
 
-    glm::mat4 model = glm::mat4(1.0f);
-              model = glm::translate(model, pos);
-    glm::mat4 view = camera.GetViewMatrix();
-    glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)screenWidth / (float)screenHeight, 0.1f, 100.0f);
+// void RenderText(std::string text, glm::vec3 pos, glm::vec4 color, GLfloat scale, bool use_sdf) {
+//     glDepthMask(GL_FALSE);
+//     Shader *shader = (use_sdf ? cshader_sdf.get() : cshader_smooth.get());
+//     if (!shader) {
+//         if (use_sdf) {
+//             cshader_sdf = std::make_unique<Shader>("../res/CharacterShader.vs", "../res/CharacterShaderSDF.fs");
+//         } else {
+//             cshader_smooth = std::make_unique<Shader>("../res/CharacterShader.vs", "../res/CharacterShaderSmooth.fs");
+//         }
+//     }
+//     shader = (use_sdf ? cshader_sdf.get() : cshader_smooth.get());
+//     if (shader->getObject("character") == nullptr) {
+//         shader->newObject("character");
+//     }
+//     Shader::ObjectInfo *obj = shader->getObject("character");
+//     if (!obj->init) {
+//         GLuint indices[2][3] = {
+//             0, 1, 3,
+//             1, 2, 3
+//         };
+//         glGenVertexArrays(1, &obj->VAO);
+//         glBindVertexArray(obj->VAO);
+//         glGenBuffers(1, &obj->VBO);
+//         glBindBuffer(GL_ARRAY_BUFFER, obj->VBO);
+//         glBufferData(GL_ARRAY_BUFFER, 6 * 4 * sizeof(float), nullptr, GL_DYNAMIC_DRAW);
+//         glGenBuffers(1, &obj->EBO);
+//         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, obj->EBO);
+//         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW);
+//         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)0);
+//         glEnableVertexAttribArray(0);
+//         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(3 * sizeof(float)));
+//         glEnableVertexAttribArray(1);
 
-    pos = projection * view * model * glm::vec4(pos, 1.0f);
-    printf("pos(%.2f, %.2f, %.2f)\n", pos.x, pos.y, pos.z);
+//         obj->init = true;
+//     }
 
-    shader->use();
-    shader->set1f("time", (float)glfwGetTime());
-    shader->set4fv("textColor", 1, glm::value_ptr(color));
-    shader->setMatrix4fv("model", 1, GL_FALSE, glm::value_ptr(model));
-    shader->setMatrix4fv("view", 1, GL_FALSE, glm::value_ptr(view));
-    shader->setMatrix4fv("projection", 1, GL_FALSE, glm::value_ptr(projection));
+//     glm::mat4 model = glm::mat4(1.0f);
+//               model = glm::translate(model, pos);
+//     glm::mat4 view = camera.GetViewMatrix();
+//     glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)screenWidth / (float)screenHeight, 0.1f, 100.0f);
 
-    // pos.y = screenHeight - pos.y;
+//     pos = projection * view * model * glm::vec4(pos, 1.0f);
+//     printf("pos(%.2f, %.2f, %.2f)\n", pos.x, pos.y, pos.z);
 
-    for (const auto& c : text) {
-        auto ch = font.chmap[c];
-        if (use_sdf) ch = font_sdf.chmap[c];
+//     shader->use();
+//     shader->set1f("time", (float)glfwGetTime());
+//     shader->set4fv("textColor", 1, glm::value_ptr(color));
+//     shader->setMatrix4fv("model", 1, GL_FALSE, glm::value_ptr(model));
+//     shader->setMatrix4fv("view", 1, GL_FALSE, glm::value_ptr(view));
+//     shader->setMatrix4fv("projection", 1, GL_FALSE, glm::value_ptr(projection));
 
-        GLfloat x = pos.x + ch->Bearing.x * scale;
-        GLfloat y = pos.y - (ch->Size.y - ch->Bearing.y) * scale;
-        GLfloat w = ch->Size.x * scale;
-        GLfloat h = ch->Size.y * scale;
+//     // pos.y = screenHeight - pos.y;
 
-        x /= screenWidth;
-        y /= screenHeight;
-        w /= screenWidth;
-        h /= screenHeight;
+//     for (const auto& c : text) {
+//         auto ch = font.chmap[c];
+//         if (use_sdf) ch = font_sdf.chmap[c];
 
-        // printf("xywh(%.2f, %.2f, %.2f, %.2f)\n", x, y, pos.x, pos.y);
+//         GLfloat x = pos.x + ch->Bearing.x * scale;
+//         GLfloat y = pos.y - (ch->Size.y - ch->Bearing.y) * scale;
+//         GLfloat w = ch->Size.x * scale;
+//         GLfloat h = ch->Size.y * scale;
 
-        GLfloat vertices[] = {
-            x,     y + h, 0.0f,  0.0f, 0.0f , // 左下
-            x,     y,     0.0f,  0.0f, 1.0f , // 左上
-            x + w, y,     0.0f,  1.0f, 1.0f , // 右上
-            x + w, y + h, 0.0f,  1.0f, 0.0f   // 右下
-        };
+//         x /= screenWidth;
+//         y /= screenHeight;
+//         w /= screenWidth;
+//         h /= screenHeight;
 
-        glBindTexture(GL_TEXTURE_2D, ch->TexID);
-        glBindBuffer(GL_ARRAY_BUFFER, obj->VBO);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
+//         // printf("xywh(%.2f, %.2f, %.2f, %.2f)\n", x, y, pos.x, pos.y);
 
-        pos.x += (ch->Advance >> 6) * scale;
-    }
-    glDepthMask(GL_TRUE);
-}
+//         GLfloat vertices[] = {
+//             x,     y + h, 0.0f,  0.0f, 0.0f , // 左下
+//             x,     y,     0.0f,  0.0f, 1.0f , // 左上
+//             x + w, y,     0.0f,  1.0f, 1.0f , // 右上
+//             x + w, y + h, 0.0f,  1.0f, 0.0f   // 右下
+//         };
+
+//         glBindTexture(GL_TEXTURE_2D, ch->TexID);
+//         glBindBuffer(GL_ARRAY_BUFFER, obj->VBO);
+//         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+//         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
+
+//         pos.x += (ch->Advance >> 6) * scale;
+//     }
+//     glDepthMask(GL_TRUE);
+// }

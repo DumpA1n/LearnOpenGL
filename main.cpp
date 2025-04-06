@@ -14,7 +14,7 @@ int screenHeight = 800;
 // #include "demo/DrawShape.h"
 #include "demo/Draw3D.h"
 #include "demo/Colors.h"
-// #include "demo/RenderText.h"
+#include "demo/RenderText.h"
 #include "demo/Draw3D_Demo.h"
 #include "utils/Camera.h"
 #include "utils/MTFilter.h"
@@ -75,13 +75,9 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-    // 多重采样
-    // glfwWindowHint(GLFW_SAMPLES, 4);  // MSAA
-
     // 创建窗口对象
     GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "LearnOpenGL & ImGui", NULL, NULL);
-    if (window == NULL)
-    {
+    if (window == NULL) {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
         return -1;
@@ -126,14 +122,17 @@ int main()
 
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-    // font_sdf.AddFontFromFileTTF("../res/fonts/Consolas.ttf", 0, 48, true);
-    // font.AddFontFromFileTTF("../res/fonts/Consolas.ttf", 0, 48, false);
+    font_sdf.AddFontFromFileTTF("../res/fonts/Consolas.ttf", 0, 48, true);
+    font.AddFontFromFileTTF("../res/fonts/Consolas.ttf", 0, 48, false);
 
     float scale = 3.0f;
 
     // Rendering
     while (!glfwWindowShouldClose(window))
     {
+        // 多重采样
+        // glfwWindowHint(GLFW_SAMPLES, 4);  // MSAA
+    
         glfwPollEvents();
 
         // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // 隐藏鼠标指针

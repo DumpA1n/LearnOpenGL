@@ -12,5 +12,4 @@ public:
     GLuint EBO;
     Object() {}
     virtual ~Object() {}
-    virtual void gen() = 0;
 };

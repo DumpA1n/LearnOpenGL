@@ -44,11 +44,12 @@ if (APPLE)
     # set(LIB_assimp "${CMAKE_SOURCE_DIR}/include/assimp/lib-MACOS/libassimp.a")
 elseif (WIN32)
     set(LIB_GLFW "${CMAKE_SOURCE_DIR}/include/GLFW/lib-WIN32/libglfw3.a")
+    set(LIB_freetype "${CMAKE_SOURCE_DIR}/include/freetype/lib-WIN32/libfreetype.a")
 endif()
 
 # 链接库
 if (APPLE)
     target_link_libraries(test ${LIB_GLFW} ${BZIP2_LIBRARIES} ${ZLIB_LIBRARIES} "-framework Cocoa -framework IOKit -framework CoreVideo -framework OpenGL")
 elseif (WIN32)
-    target_link_libraries(test ${LIB_GLFW} opengl32)
+    target_link_libraries(test ${LIB_GLFW} ${LIB_freetype} opengl32)
 endif()
