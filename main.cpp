@@ -122,8 +122,8 @@ int main()
 
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-    font_sdf.AddFontFromFileTTF("../res/fonts/Consolas.ttf", 0, 48, true);
-    font.AddFontFromFileTTF("../res/fonts/Consolas.ttf", 0, 48, false);
+    // font_sdf.AddFontFromFileTTF("../res/fonts/Consolas.ttf", 0, 48, true);
+    // font.AddFontFromFileTTF("../res/fonts/Consolas.ttf", 0, 48, false);
 
     float scale = 3.0f;
 
@@ -163,10 +163,10 @@ int main()
             ImGui::End();
         }
 
-        // render_demo();
+        render_demo();
         // DrawCube();
-        DrawLight(window);
-        Draw3DGraphic(window);
+        // DrawLight(window);
+        // Draw3DGraphic(window);
 
         ImGui::Render();
         int display_w, display_h;

@@ -81,6 +81,8 @@
         "xtree": "cpp",
         "forward_list": "cpp",
         "format": "cpp",
-        "__config": "cpp"
+        "__config": "cpp",
+        "charconv": "cpp",
+        "sstream": "cpp"
     }
 }

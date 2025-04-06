@@ -8,6 +8,7 @@ public:
     GLuint VBO;
     GLuint VAO;
     GLuint EBO;
+    uint32_t TextureUnit;
     float lastFrame;
     float visibility = 0.2;
 
@@ -33,6 +34,7 @@ public:
     void setMatrix4fv(const char *name, GLsizei count, GLboolean transpose, const GLfloat *value);
     void setMatrix4fv(const char *name, const GLfloat *value);
     void setSampler(const char *name, const Texture* texture);
+    void setSampler(const char *name, GLuint texId);
     void setVertexData(float *vertices, size_t size = 80);
     void setVertexData();
     float getDeltaTime();
@@ -109,12 +111,12 @@ Shader::Shader(const char *vertexShaderSource, const char *fragmentShaderSource)
 }
 
 void Shader::use() {
+    TextureUnit = 0;
     glUseProgram(program);
 }
 
 void Shader::draw() {
     glBindVertexArray(VAO);
-    // glDrawArrays(GL_TRIANGLES, 0, 6);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
@@ -183,9 +185,17 @@ void Shader::setMatrix4fv(const char *name, const GLfloat *value) {
 }
 
 void Shader::setSampler(const char *name, const Texture* texture) {
-    set1i(name, texture->index);
-    glActiveTexture(GL_TEXTURE0 + texture->index);
+    set1i(name, TextureUnit);
+    glActiveTexture(GL_TEXTURE0 + TextureUnit);
     glBindTexture(GL_TEXTURE_2D, texture->id);
+    TextureUnit++;
+}
+
+void Shader::setSampler(const char *name, GLuint texId) {
+    set1i(name, TextureUnit);
+    glActiveTexture(GL_TEXTURE0 + TextureUnit);
+    glBindTexture(GL_TEXTURE_2D, texId);
+    TextureUnit++;
 }
 
 void Shader::setVertexData(float *vertices, size_t size) {

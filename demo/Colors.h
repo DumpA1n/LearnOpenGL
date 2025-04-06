@@ -45,7 +45,7 @@ void DrawLight(GLFWwindow* window) {
     char lightText[24];
     snprintf(lightText, sizeof(lightText), "Light(ImGui API)");
     ImVec2 textSize = ImGui::CalcTextSize(lightText);
-    // ImGui::GetBackgroundDrawList()->AddText(ImVec2(screenPos.x - textSize.x / 2, screenPos.y), IM_COL32(22, 255, 235, 255), lightText);
+    ImGui::GetBackgroundDrawList()->AddText(ImVec2(screenPos.x - textSize.x / 2, screenPos.y), IM_COL32(22, 255, 235, 255), lightText);
     // ImGui::RenderBullet(ImGui::GetBackgroundDrawList(), ImVec2(screenPos.x, screenPos.y), IM_COL32(22, 255, 235, 255));
     // RenderText("Light", glm::vec2(screenPos.x, screenPos.y), glm::vec4(0.9f, 0.5f, 0.5f, 1.0f), 1.0f, true);
     // RenderText("Test Text 180 ABO Normal", glm::vec2(screenPos.x, screenPos.y), glm::vec4(1.0f), 3.0f);

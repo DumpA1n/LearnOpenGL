@@ -6,6 +6,8 @@ project(test)
 # 指定 C++ 标准
 set(CMAKE_CXX_STANDARD 17)
 
+add_compile_options(-w)
+
 # 查找并链接必要的库
 if (APPLE)
     find_package(BZip2 REQUIRED)

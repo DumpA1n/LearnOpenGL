@@ -1,18 +1,19 @@
 #pragma once
-#ifndef MTFILTER_H
-#define MTFILTER_H
 
 #include "utils/Shader.h"
-// #include "utils/Shader_old.h"
 
 class MTFilter {
 public:
-
-    bool IsInit = false;
-
     std::unordered_map<std::string, Shader*> ShaderList;
     std::unordered_map<std::string, FrameBuffer*> FrameBufferList;
     std::unordered_map<std::string, Texture*> TextureList;
+
+    MTFilter() {}
+    virtual ~MTFilter() {
+        for (auto& it : ShaderList) { delete it.second; }
+        for (auto& it : FrameBufferList) { delete it.second; }
+        for (auto& it : TextureList) { delete it.second; }
+    }
 
     Shader* newShader(std::string name, const char* vert, const char* frag) {
         Shader* shader = new Shader(vert, frag);
@@ -24,10 +25,8 @@ public:
     }
 
     FrameBuffer* newFrameBuffer(std::string name) {
-        FrameBuffer* framebuffer = new FrameBuffer(name);
+        FrameBuffer* framebuffer = new FrameBuffer{name};
         FrameBufferList[name] = framebuffer;
-        framebuffer->texture->index = TextureList.size();
-        TextureList[name] = framebuffer->texture;
         return framebuffer;
     }
     FrameBuffer* getFrameBuffer(std::string name) {
@@ -35,42 +34,42 @@ public:
     }
 
     Texture* newTexture(std::string name, const char* filename) {
-        Texture* texture = new Texture(filename);
-        texture->index = TextureList.size();
+        Texture* texture = new Texture{filename};
         TextureList[name] = texture;
         return texture;
     }
     Texture* getTexture(std::string name) {
         return TextureList[name];
     }
-
-} MTFilter;
-
+};
 
 
-void Initialize() {
-    MTFilter.newShader("shader", "../res/shader/test.vs", "../res/shader/test.fs");
-    MTFilter.newShader("fba", "../res/shader/fba.vs", "../res/shader/fba.fs");
-    MTFilter.newFrameBuffer("fba");
-    MTFilter.newFrameBuffer("fbb");
-    MTFilter.newFrameBuffer("fbc");
-    MTFilter.newTexture("box", "../res/container.jpg");
-    MTFilter.getTexture("box")->setTexParament(GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER);
-    MTFilter.newTexture("face", "../res/awesomeface.png");
-    MTFilter.getTexture("face")->setTexParament(GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER);
-    MTFilter.IsInit = true;
-}
+class Test1 : public MTFilter {
+public:
+    Test1() {
+        newShader("shader", "../res/shader/test.vs", "../res/shader/test.fs");
+        newShader("fba", "../res/shader/fba.vs", "../res/shader/fba.fs");
+        newFrameBuffer("fba");
+        newFrameBuffer("fbb");
+        newFrameBuffer("fbc");
+        newTexture("box", "../res/container.jpg");
+        getTexture("box")->setTexParament(GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER);
+        newTexture("face", "../res/awesomeface.png");
+        getTexture("face")->setTexParament(GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER);
+    }
+    ~Test1() {}
+};
 
 void render_demo() {
-    if (!MTFilter.IsInit) Initialize();
+    static std::unique_ptr<Test1> filter = std::make_unique<Test1>();
 
-    Shader* _shader = MTFilter.getShader("shader");
-    Shader* _shader_fba = MTFilter.getShader("fba");
-    FrameBuffer* _fba = MTFilter.getFrameBuffer("fba");
-    FrameBuffer* _fbb = MTFilter.getFrameBuffer("fbb");
-    FrameBuffer* _fbc = MTFilter.getFrameBuffer("fbc");
-    Texture* _box  = MTFilter.getTexture("box");
-    Texture* _face = MTFilter.getTexture("face");
+    Shader* _shader = filter->getShader("shader");
+    Shader* _shader_fba = filter->getShader("fba");
+    FrameBuffer* _fba = filter->getFrameBuffer("fba");
+    FrameBuffer* _fbb = filter->getFrameBuffer("fbb");
+    FrameBuffer* _fbc = filter->getFrameBuffer("fbc");
+    Texture* _box  = filter->getTexture("box");
+    Texture* _face = filter->getTexture("face");
 
     float vertices[] = {
          0.5f,  0.5f, 0.0f, 1.0f,  1.0f, // 右上
@@ -100,5 +99,3 @@ void render_demo() {
     _shader->setVertexData(vertices);
     _shader->draw();
 }
-
-#endif // MTFILTER_H

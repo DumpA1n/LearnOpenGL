@@ -11,11 +11,10 @@
 #include <memory>
 
 #include "stb/stb_image.h"
+
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
-
-static int texture_index = 0;
 
 class Texture {
 public:
@@ -23,9 +22,7 @@ public:
     int width;
     int height;
     int nrChannels;
-    int index;
     Texture() {
-        index = texture_index++;
         glGenTextures(1, &id);
         glBindTexture(GL_TEXTURE_2D, id);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, screenWidth, screenHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
@@ -33,7 +30,6 @@ public:
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, id, 0);
     }
     Texture(const char* filename) {
-        index = texture_index++;
         glGenTextures(1, &id);
         glBindTexture(GL_TEXTURE_2D, id);
         setTexParament(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
@@ -53,6 +49,7 @@ public:
         }
         stbi_image_free(data);
     }
+    ~Texture() {}
     void setTexParament(uint32_t WRAP_S = GL_CLAMP_TO_EDGE, uint32_t WRAP_T = GL_CLAMP_TO_EDGE, uint32_t MIN_FILTER = GL_LINEAR_MIPMAP_LINEAR, uint32_t MAG_FILTER = GL_LINEAR) {
         glBindTexture(GL_TEXTURE_2D, id);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, WRAP_S);
