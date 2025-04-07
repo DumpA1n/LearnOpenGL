@@ -1,30 +1,22 @@
 #include <iostream>
-#include <stdio.h>
 
-#include "include/glad/glad.h"
-#include "include/GLFW/glfw3.h"
+#include "glad/glad.h"
+#include "GLFW/glfw3.h"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
-int screenWidth = 1200;
-int screenHeight = 800;
-
 // #include "demo/DrawShape.h"
 #include "demo/Draw3D.h"
-#include "demo/Colors.h"
+#include "demo/RenderLight.h"
 #include "demo/RenderText.h"
 #include "demo/Draw3D_Demo.h"
-#include "utils/Camera.h"
-#include "utils/MTFilter.h"
+#include "src/Camera.h"
+#include "src/MTFilter.h"
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-    screenWidth = width;
-    screenHeight = height;
-    glViewport(0, 0, width, height);
-}
+int screenWidth = 1200;
+int screenHeight = 800;
 
 void processInput(GLFWwindow *window)
 {
@@ -39,10 +31,18 @@ int getMaxnrAttributes() {
     return nrAttributes;
 }
 
-bool isFirstMousemv = true;
-float lastX = 400;
-float lastY = 300;
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+    screenWidth = width;
+    screenHeight = height;
+    glViewport(0, 0, width, height);
+}
+
 void mouse_pos_callback(GLFWwindow *window, double xpos, double ypos) {
+    static bool isFirstMousemv = true;
+    static float lastX = 400;
+    static float lastY = 300;
+
     if (isFirstMousemv) {
         lastX = xpos;
         lastY = ypos;
@@ -64,8 +64,6 @@ void mouse_pos_callback(GLFWwindow *window, double xpos, double ypos) {
 void scrool_callback(GLFWwindow* window, double xoffset, double yoffset) {
     camera.ProcessMouseScrool(yoffset);
 }
-
-bool text_debug_window = true;
 
 int main()
 {

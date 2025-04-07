@@ -10,9 +10,9 @@
 #include "imgui_impl_opengl3.h"
 #include "imgui_internal.h"
 
-#include "utils/Shader.h"
-#include "utils/Camera.h"
-#include "utils/Object.h"
+#include "src/Shader.h"
+#include "src/Camera.h"
+#include "src/Object.h"
 
 #include <ft2build.h>
 #include <freetype/freetype.h>
@@ -22,7 +22,7 @@
 
 extern int screenWidth, screenHeight;
 
-struct Character : Object {
+class Character : public Object {
 public:
     GLuint     TexID;
     glm::ivec2 Size;

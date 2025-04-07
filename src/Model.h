@@ -1,6 +1,4 @@
 #pragma once
-#ifndef MODEL_H
-#define MODEL_H
 
 #include "Mesh.h"
 
@@ -133,5 +131,3 @@ uint32_t TextureFromFile(const char *path, const std::string &directory, bool ga
 
     return textureID;
 }
-
-#endif

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "utils/Shader.h"
-// #include "utils/Shader_old.h"
+#include "src/Shader.h"
+// #include "src/Shader_old.h"
 
 #ifdef _WIN32
     #define u_char unsigned char

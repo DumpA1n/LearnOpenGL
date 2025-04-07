@@ -9,14 +9,14 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
-#include "utils/Shader.h"
-#include "utils/Camera.h"
-#include "utils/Texture.h"
+#include "MMath.h"
+
+#include "src/Shader.h"
+#include "src/Camera.h"
+#include "src/Texture.h"
 #include "RenderText.h"
 
-#include "utils/Rectangle.h"
-
-extern int screenWidth, screenHeight;
+#include "src/Rectangle.h"
 
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 

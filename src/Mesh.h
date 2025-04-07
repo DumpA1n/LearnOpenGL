@@ -1,15 +1,16 @@
 #pragma once
-#ifndef MESH_H
-#define MESH_H
 
 #include <string>
+#include <vector>
 
-#include <glad/glad.h>
+#include "glad/glad.h"
+#include "GLFW/glfw3.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "utils/Shader.h"
+#include "src/Shader.h"
 
 struct Vertex {
     glm::vec3 Position;
@@ -35,10 +36,7 @@ public:
         this->textures = textures;
         setupMesh();
     }
-    // uniform sample2D diffTexture1;
-    // uniform sample2D diffTexture2;
-    // uniform sample2D specTexture1;
-    // uniform sample2D specTexture2;
+
     void Draw(Shader& shader) {
         int diffIndex = 0;
         int specIndex = 0;
@@ -79,5 +77,3 @@ private:
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 };
-
-#endif

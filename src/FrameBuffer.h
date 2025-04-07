@@ -1,6 +1,6 @@
 #pragma once
 
-#include "utils/Texture.h"
+#include "src/Texture.h"
 
 class FrameBuffer {
 public:

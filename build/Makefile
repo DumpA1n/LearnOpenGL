@@ -116,24 +116,24 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named test
+# Target rules for targets named OpenGLRenderer
 
 # Build rule for target.
-test: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 test
-.PHONY : test
+OpenGLRenderer: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 OpenGLRenderer
+.PHONY : OpenGLRenderer
 
 # fast build rule for target.
-test/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/build
-.PHONY : test/fast
+OpenGLRenderer/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/build
+.PHONY : OpenGLRenderer/fast
 
 include/glad/glad.obj: include/glad/glad.c.obj
 .PHONY : include/glad/glad.obj
 
 # target to build an object file
 include/glad/glad.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/glad/glad.c.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/glad/glad.c.obj
 .PHONY : include/glad/glad.c.obj
 
 include/glad/glad.i: include/glad/glad.c.i
@@ -141,7 +141,7 @@ include/glad/glad.i: include/glad/glad.c.i
 
 # target to preprocess a source file
 include/glad/glad.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/glad/glad.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/glad/glad.c.i
 .PHONY : include/glad/glad.c.i
 
 include/glad/glad.s: include/glad/glad.c.s
@@ -149,7 +149,7 @@ include/glad/glad.s: include/glad/glad.c.s
 
 # target to generate assembly for a file
 include/glad/glad.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/glad/glad.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/glad/glad.c.s
 .PHONY : include/glad/glad.c.s
 
 include/imgui/backends/imgui_impl_glfw.obj: include/imgui/backends/imgui_impl_glfw.cpp.obj
@@ -157,7 +157,7 @@ include/imgui/backends/imgui_impl_glfw.obj: include/imgui/backends/imgui_impl_gl
 
 # target to build an object file
 include/imgui/backends/imgui_impl_glfw.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/imgui/backends/imgui_impl_glfw.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/imgui/backends/imgui_impl_glfw.cpp.obj
 .PHONY : include/imgui/backends/imgui_impl_glfw.cpp.obj
 
 include/imgui/backends/imgui_impl_glfw.i: include/imgui/backends/imgui_impl_glfw.cpp.i
@@ -165,7 +165,7 @@ include/imgui/backends/imgui_impl_glfw.i: include/imgui/backends/imgui_impl_glfw
 
 # target to preprocess a source file
 include/imgui/backends/imgui_impl_glfw.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/imgui/backends/imgui_impl_glfw.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/imgui/backends/imgui_impl_glfw.cpp.i
 .PHONY : include/imgui/backends/imgui_impl_glfw.cpp.i
 
 include/imgui/backends/imgui_impl_glfw.s: include/imgui/backends/imgui_impl_glfw.cpp.s
@@ -173,7 +173,7 @@ include/imgui/backends/imgui_impl_glfw.s: include/imgui/backends/imgui_impl_glfw
 
 # target to generate assembly for a file
 include/imgui/backends/imgui_impl_glfw.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/imgui/backends/imgui_impl_glfw.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/imgui/backends/imgui_impl_glfw.cpp.s
 .PHONY : include/imgui/backends/imgui_impl_glfw.cpp.s
 
 include/imgui/backends/imgui_impl_opengl3.obj: include/imgui/backends/imgui_impl_opengl3.cpp.obj
@@ -181,7 +181,7 @@ include/imgui/backends/imgui_impl_opengl3.obj: include/imgui/backends/imgui_impl
 
 # target to build an object file
 include/imgui/backends/imgui_impl_opengl3.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/imgui/backends/imgui_impl_opengl3.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/imgui/backends/imgui_impl_opengl3.cpp.obj
 .PHONY : include/imgui/backends/imgui_impl_opengl3.cpp.obj
 
 include/imgui/backends/imgui_impl_opengl3.i: include/imgui/backends/imgui_impl_opengl3.cpp.i
@@ -189,7 +189,7 @@ include/imgui/backends/imgui_impl_opengl3.i: include/imgui/backends/imgui_impl_o
 
 # target to preprocess a source file
 include/imgui/backends/imgui_impl_opengl3.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/imgui/backends/imgui_impl_opengl3.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/imgui/backends/imgui_impl_opengl3.cpp.i
 .PHONY : include/imgui/backends/imgui_impl_opengl3.cpp.i
 
 include/imgui/backends/imgui_impl_opengl3.s: include/imgui/backends/imgui_impl_opengl3.cpp.s
@@ -197,7 +197,7 @@ include/imgui/backends/imgui_impl_opengl3.s: include/imgui/backends/imgui_impl_o
 
 # target to generate assembly for a file
 include/imgui/backends/imgui_impl_opengl3.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/imgui/backends/imgui_impl_opengl3.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/imgui/backends/imgui_impl_opengl3.cpp.s
 .PHONY : include/imgui/backends/imgui_impl_opengl3.cpp.s
 
 include/imgui/imgui.obj: include/imgui/imgui.cpp.obj
@@ -205,7 +205,7 @@ include/imgui/imgui.obj: include/imgui/imgui.cpp.obj
 
 # target to build an object file
 include/imgui/imgui.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/imgui/imgui.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/imgui/imgui.cpp.obj
 .PHONY : include/imgui/imgui.cpp.obj
 
 include/imgui/imgui.i: include/imgui/imgui.cpp.i
@@ -213,7 +213,7 @@ include/imgui/imgui.i: include/imgui/imgui.cpp.i
 
 # target to preprocess a source file
 include/imgui/imgui.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/imgui/imgui.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/imgui/imgui.cpp.i
 .PHONY : include/imgui/imgui.cpp.i
 
 include/imgui/imgui.s: include/imgui/imgui.cpp.s
@@ -221,7 +221,7 @@ include/imgui/imgui.s: include/imgui/imgui.cpp.s
 
 # target to generate assembly for a file
 include/imgui/imgui.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/imgui/imgui.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/imgui/imgui.cpp.s
 .PHONY : include/imgui/imgui.cpp.s
 
 include/imgui/imgui_demo.obj: include/imgui/imgui_demo.cpp.obj
@@ -229,7 +229,7 @@ include/imgui/imgui_demo.obj: include/imgui/imgui_demo.cpp.obj
 
 # target to build an object file
 include/imgui/imgui_demo.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/imgui/imgui_demo.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/imgui/imgui_demo.cpp.obj
 .PHONY : include/imgui/imgui_demo.cpp.obj
 
 include/imgui/imgui_demo.i: include/imgui/imgui_demo.cpp.i
@@ -237,7 +237,7 @@ include/imgui/imgui_demo.i: include/imgui/imgui_demo.cpp.i
 
 # target to preprocess a source file
 include/imgui/imgui_demo.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/imgui/imgui_demo.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/imgui/imgui_demo.cpp.i
 .PHONY : include/imgui/imgui_demo.cpp.i
 
 include/imgui/imgui_demo.s: include/imgui/imgui_demo.cpp.s
@@ -245,7 +245,7 @@ include/imgui/imgui_demo.s: include/imgui/imgui_demo.cpp.s
 
 # target to generate assembly for a file
 include/imgui/imgui_demo.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/imgui/imgui_demo.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/imgui/imgui_demo.cpp.s
 .PHONY : include/imgui/imgui_demo.cpp.s
 
 include/imgui/imgui_draw.obj: include/imgui/imgui_draw.cpp.obj
@@ -253,7 +253,7 @@ include/imgui/imgui_draw.obj: include/imgui/imgui_draw.cpp.obj
 
 # target to build an object file
 include/imgui/imgui_draw.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/imgui/imgui_draw.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/imgui/imgui_draw.cpp.obj
 .PHONY : include/imgui/imgui_draw.cpp.obj
 
 include/imgui/imgui_draw.i: include/imgui/imgui_draw.cpp.i
@@ -261,7 +261,7 @@ include/imgui/imgui_draw.i: include/imgui/imgui_draw.cpp.i
 
 # target to preprocess a source file
 include/imgui/imgui_draw.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/imgui/imgui_draw.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/imgui/imgui_draw.cpp.i
 .PHONY : include/imgui/imgui_draw.cpp.i
 
 include/imgui/imgui_draw.s: include/imgui/imgui_draw.cpp.s
@@ -269,7 +269,7 @@ include/imgui/imgui_draw.s: include/imgui/imgui_draw.cpp.s
 
 # target to generate assembly for a file
 include/imgui/imgui_draw.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/imgui/imgui_draw.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/imgui/imgui_draw.cpp.s
 .PHONY : include/imgui/imgui_draw.cpp.s
 
 include/imgui/imgui_tables.obj: include/imgui/imgui_tables.cpp.obj
@@ -277,7 +277,7 @@ include/imgui/imgui_tables.obj: include/imgui/imgui_tables.cpp.obj
 
 # target to build an object file
 include/imgui/imgui_tables.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/imgui/imgui_tables.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/imgui/imgui_tables.cpp.obj
 .PHONY : include/imgui/imgui_tables.cpp.obj
 
 include/imgui/imgui_tables.i: include/imgui/imgui_tables.cpp.i
@@ -285,7 +285,7 @@ include/imgui/imgui_tables.i: include/imgui/imgui_tables.cpp.i
 
 # target to preprocess a source file
 include/imgui/imgui_tables.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/imgui/imgui_tables.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/imgui/imgui_tables.cpp.i
 .PHONY : include/imgui/imgui_tables.cpp.i
 
 include/imgui/imgui_tables.s: include/imgui/imgui_tables.cpp.s
@@ -293,7 +293,7 @@ include/imgui/imgui_tables.s: include/imgui/imgui_tables.cpp.s
 
 # target to generate assembly for a file
 include/imgui/imgui_tables.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/imgui/imgui_tables.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/imgui/imgui_tables.cpp.s
 .PHONY : include/imgui/imgui_tables.cpp.s
 
 include/imgui/imgui_widgets.obj: include/imgui/imgui_widgets.cpp.obj
@@ -301,7 +301,7 @@ include/imgui/imgui_widgets.obj: include/imgui/imgui_widgets.cpp.obj
 
 # target to build an object file
 include/imgui/imgui_widgets.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/imgui/imgui_widgets.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/imgui/imgui_widgets.cpp.obj
 .PHONY : include/imgui/imgui_widgets.cpp.obj
 
 include/imgui/imgui_widgets.i: include/imgui/imgui_widgets.cpp.i
@@ -309,7 +309,7 @@ include/imgui/imgui_widgets.i: include/imgui/imgui_widgets.cpp.i
 
 # target to preprocess a source file
 include/imgui/imgui_widgets.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/imgui/imgui_widgets.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/imgui/imgui_widgets.cpp.i
 .PHONY : include/imgui/imgui_widgets.cpp.i
 
 include/imgui/imgui_widgets.s: include/imgui/imgui_widgets.cpp.s
@@ -317,7 +317,7 @@ include/imgui/imgui_widgets.s: include/imgui/imgui_widgets.cpp.s
 
 # target to generate assembly for a file
 include/imgui/imgui_widgets.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/imgui/imgui_widgets.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/imgui/imgui_widgets.cpp.s
 .PHONY : include/imgui/imgui_widgets.cpp.s
 
 include/stb/stb_image.obj: include/stb/stb_image.cpp.obj
@@ -325,7 +325,7 @@ include/stb/stb_image.obj: include/stb/stb_image.cpp.obj
 
 # target to build an object file
 include/stb/stb_image.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/stb/stb_image.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/stb/stb_image.cpp.obj
 .PHONY : include/stb/stb_image.cpp.obj
 
 include/stb/stb_image.i: include/stb/stb_image.cpp.i
@@ -333,7 +333,7 @@ include/stb/stb_image.i: include/stb/stb_image.cpp.i
 
 # target to preprocess a source file
 include/stb/stb_image.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/stb/stb_image.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/stb/stb_image.cpp.i
 .PHONY : include/stb/stb_image.cpp.i
 
 include/stb/stb_image.s: include/stb/stb_image.cpp.s
@@ -341,7 +341,7 @@ include/stb/stb_image.s: include/stb/stb_image.cpp.s
 
 # target to generate assembly for a file
 include/stb/stb_image.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/stb/stb_image.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/stb/stb_image.cpp.s
 .PHONY : include/stb/stb_image.cpp.s
 
 include/stb/stb_truetype.obj: include/stb/stb_truetype.cpp.obj
@@ -349,7 +349,7 @@ include/stb/stb_truetype.obj: include/stb/stb_truetype.cpp.obj
 
 # target to build an object file
 include/stb/stb_truetype.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/stb/stb_truetype.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/stb/stb_truetype.cpp.obj
 .PHONY : include/stb/stb_truetype.cpp.obj
 
 include/stb/stb_truetype.i: include/stb/stb_truetype.cpp.i
@@ -357,7 +357,7 @@ include/stb/stb_truetype.i: include/stb/stb_truetype.cpp.i
 
 # target to preprocess a source file
 include/stb/stb_truetype.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/stb/stb_truetype.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/stb/stb_truetype.cpp.i
 .PHONY : include/stb/stb_truetype.cpp.i
 
 include/stb/stb_truetype.s: include/stb/stb_truetype.cpp.s
@@ -365,32 +365,56 @@ include/stb/stb_truetype.s: include/stb/stb_truetype.cpp.s
 
 # target to generate assembly for a file
 include/stb/stb_truetype.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/include/stb/stb_truetype.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/include/stb/stb_truetype.cpp.s
 .PHONY : include/stb/stb_truetype.cpp.s
 
-main.obj: main.cpp.obj
-.PHONY : main.obj
+src/Shader.obj: src/Shader.cpp.obj
+.PHONY : src/Shader.obj
 
 # target to build an object file
-main.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/main.cpp.obj
-.PHONY : main.cpp.obj
+src/Shader.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/src/Shader.cpp.obj
+.PHONY : src/Shader.cpp.obj
 
-main.i: main.cpp.i
-.PHONY : main.i
+src/Shader.i: src/Shader.cpp.i
+.PHONY : src/Shader.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/main.cpp.i
-.PHONY : main.cpp.i
+src/Shader.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/src/Shader.cpp.i
+.PHONY : src/Shader.cpp.i
 
-main.s: main.cpp.s
-.PHONY : main.s
+src/Shader.s: src/Shader.cpp.s
+.PHONY : src/Shader.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/main.cpp.s
-.PHONY : main.cpp.s
+src/Shader.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/src/Shader.cpp.s
+.PHONY : src/Shader.cpp.s
+
+src/main.obj: src/main.cpp.obj
+.PHONY : src/main.obj
+
+# target to build an object file
+src/main.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/src/main.cpp.obj
+.PHONY : src/main.cpp.obj
+
+src/main.i: src/main.cpp.i
+.PHONY : src/main.i
+
+# target to preprocess a source file
+src/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/src/main.cpp.i
+.PHONY : src/main.cpp.i
+
+src/main.s: src/main.cpp.s
+.PHONY : src/main.s
+
+# target to generate assembly for a file
+src/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\OpenGLRenderer.dir\build.make CMakeFiles/OpenGLRenderer.dir/src/main.cpp.s
+.PHONY : src/main.cpp.s
 
 # Help Target
 help:
@@ -400,7 +424,7 @@ help:
 	@echo ... depend
 	@echo ... edit_cache
 	@echo ... rebuild_cache
-	@echo ... test
+	@echo ... OpenGLRenderer
 	@echo ... include/glad/glad.obj
 	@echo ... include/glad/glad.i
 	@echo ... include/glad/glad.s
@@ -431,9 +455,12 @@ help:
 	@echo ... include/stb/stb_truetype.obj
 	@echo ... include/stb/stb_truetype.i
 	@echo ... include/stb/stb_truetype.s
-	@echo ... main.obj
-	@echo ... main.i
-	@echo ... main.s
+	@echo ... src/Shader.obj
+	@echo ... src/Shader.i
+	@echo ... src/Shader.s
+	@echo ... src/main.obj
+	@echo ... src/main.i
+	@echo ... src/main.s
 .PHONY : help
 
 
