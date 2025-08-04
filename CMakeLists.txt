@@ -34,10 +34,10 @@ file(GLOB_RECURSE SOURCES
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 
-if (APPLE)
-    set(ARCH "lib-MACOS")
-elseif (WIN32)
-    set(ARCH "lib-WIN32")
+if (CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64")
+    set(ARCH "lib-arm64")
+elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
+    set(ARCH "lib-x86_64")
 endif()
 
 set(LIBS
