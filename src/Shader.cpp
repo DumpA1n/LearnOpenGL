@@ -7,7 +7,7 @@ Shader::Shader(const char *vertexShaderSource, const char *fragmentShaderSource)
             strstr(filename, ".vert") || strstr(filename, ".frag")) {
             FILE* fp = fopen(filename, "r");
             if (!fp) {
-                std::cerr << "Compile Shader Error: Failed to open file" << std::endl;
+                std::cerr << "Compile Shader Error: Failed to open file: " << filename << std::endl;
             }
             char line[512];
             std::string result;
