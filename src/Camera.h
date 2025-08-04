@@ -2,6 +2,8 @@
 
 #include "MMath.h"
 
+#include "Shader.h"
+
 float PITCH = 0.0f;
 float YAW = -90.0f;
 float ZOOM = 45.0f;
