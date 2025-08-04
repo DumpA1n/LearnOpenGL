@@ -12,6 +12,7 @@
 #include "demo/RenderLight.h"
 #include "demo/RenderText.h"
 #include "demo/Draw3D_Demo.h"
+#include "demo/TestFilter1.h"
 #include "src/Camera.h"
 #include "src/MTFilter.h"
 
@@ -161,7 +162,7 @@ int main()
             ImGui::End();
         }
 
-        render_demo();
+        TestFilter1::render_demo();
         // DrawCube();
         // DrawLight(window);
         // Draw3DGraphic(window);
