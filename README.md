@@ -1,4 +1,3 @@
 # LearnOpenGL
-LearnOpenGL
 
-## Refactoring... Started on 2022/12/19
+## Refactoring... Started on 2025/12/19
