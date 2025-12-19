@@ -10,8 +10,8 @@
 #include "imgui_impl_opengl3.h"
 #include "imgui_internal.h"
 
-#include "src/Shader.h"
-#include "src/Camera.h"
+#include "src/Resources/Shader.h"
+#include "src/Utils/Camera.h"
 #include "src/Object.h"
 
 #include <ft2build.h>

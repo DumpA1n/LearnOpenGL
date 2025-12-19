@@ -2,12 +2,16 @@
 
 #include "MTFilterManager.h"
 #include "src/Core/Application.h"
+#include "src/Scene/Scene.h"
+#include "src/Scene/Entity.h"
+#include "src/Scene/MeshRenderer.h"
+#include "src/Scene/CameraComponent.h"
 #include "glm/detail/type_mat.hpp"
 #include "glm/detail/type_vec.hpp"
 
-class TestFilter1 : public MTFilter {
+class TestFilter1_ECS : public MTFilter {
 public:
-    TestFilter1() {
+    TestFilter1_ECS() {
         newShader("shader", "../res/shader/test.vs", "../res/shader/test.fs");
         newShader("fba", "../res/shader/fba.vs", "../res/shader/fba.fs");
         newFrameBuffer("fba");
@@ -39,7 +43,35 @@ public:
         geom->setIndexData(indices, 6);
         geom->setStandardLayout();
     }
-    ~TestFilter1() = default;
+    ~TestFilter1_ECS() = default;
+
+    // 使用Scene系统创建场景
+    static std::shared_ptr<Scene> CreateScene() {
+        auto scene = std::make_shared<Scene>("TestScene");
+        
+        auto filter = MTFilterManager::instance()->getFilter("TestFilter1");
+        auto _shader = filter->getShader("shader");
+        auto _box = filter->getTexture("box");
+        auto _geom = filter->getGeometry("quad");
+        
+        // 创建相机实体
+        auto cameraEntity = scene->CreateEntity("MainCamera");
+        cameraEntity->GetTransform()->SetPosition(glm::vec3(0.0f, 0.0f, 3.0f));
+        auto cameraComp = cameraEntity->AddComponent<CameraComponent>();
+        scene->SetMainCamera(cameraComp);
+        
+        // 创建渲染对象
+        auto quadEntity = scene->CreateEntity("Quad");
+        quadEntity->GetTransform()->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+        quadEntity->GetTransform()->SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
+        
+        auto renderer = quadEntity->AddComponent<MeshRenderer>();
+        renderer->SetShader(_shader);
+        renderer->SetGeometry(_geom);
+        renderer->SetTexture(_box);
+        
+        return scene;
+    }
 
     static void render_demo() {
         auto filter = MTFilterManager::instance()->getFilter("TestFilter1");
@@ -84,4 +116,4 @@ public:
     }
 };
 
-REGISTER_FILTER_CLASS("TestFilter1", TestFilter1)
+REGISTER_FILTER_CLASS("TestFilter1_ECS", TestFilter1_ECS)

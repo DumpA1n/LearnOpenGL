@@ -10,7 +10,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-#include "src/Shader.h"
+#include "src/Resources/Shader.h"
 
 void DrawCube() {
     static Shader* shader = new Shader("../res/shader/cube/shader.vs", "../res/shader/cube/shader.fs");

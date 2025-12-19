@@ -1,7 +1,7 @@
 #pragma once
 
-#include "src/Shader.h"
-#include "src/Camera.h"
+#include "src/Resources/Shader.h"
+#include "src/Utils/Camera.h"
 #include "src/Model.h"
 
 void RenderModel(GLFWwindow* window, Shader& shader, Model& _model) {

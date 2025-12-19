@@ -2,13 +2,13 @@
 
 #include "MMath.h"
 
-#include "Shader.h"
+#include "../Resources/Shader.h"
 
-float PITCH = 0.0f;
-float YAW = -90.0f;
-float ZOOM = 45.0f;
-float MOVESPEED = 4.5f;
-float MOUSESENSITIVE = 0.08f;
+constexpr float PITCH = 0.0f;
+constexpr float YAW = -90.0f;
+constexpr float ZOOM = 45.0f;
+constexpr float MOVESPEED = 4.5f;
+constexpr float MOUSESENSITIVE = 0.08f;
 
 class Camera {
 public:
@@ -86,4 +86,3 @@ private:
     }
 };
 
-Camera camera(glm::vec3(0.0f, 1.0f, 5.0f));

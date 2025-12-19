@@ -1,5 +1,7 @@
 #include "Shader.h"
 
+#include "FrameBuffer.h"
+
 Shader::Shader(const char *vertexShaderSource, const char *fragmentShaderSource) {
     auto compileShaderSource = [](const char *filename, GLenum type, GLsizei count) -> GLuint {
         std::string _shaderSource;
@@ -56,18 +58,6 @@ Shader::Shader(const char *vertexShaderSource, const char *fragmentShaderSource)
         0, 1, 3,
         1, 2, 3
     };
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
-    glGenBuffers(1, &VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, 5 * 4 * sizeof(float), nullptr, GL_DYNAMIC_DRAW);
-    glGenBuffers(1, &EBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
 }
 
 void Shader::use() {
@@ -75,22 +65,26 @@ void Shader::use() {
     glUseProgram(program);
 }
 
-void Shader::draw() {
-    glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+#include "Geometry.h"
+
+void Shader::draw(const Geometry* geometry) const {
+    if (geometry) {
+        geometry->draw();
+    }
+}
+
+void Shader::draw(const std::shared_ptr<Geometry>& geometry) const {
+    if (geometry) {
+        geometry->draw();
+    }
 }
 
 void Shader::drawElements(GLenum mode, GLsizei count, GLenum type, const void *indices) {
-    glBindVertexArray(VAO);
-    glDrawElements(mode, count, type, indices);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    // 已废弃：请使用 geometry->drawElements()
 }
 
 void Shader::drawArray(GLenum mode, GLint first, GLsizei count) {
-    glBindVertexArray(VAO);
-    glDrawArrays(mode, first, count);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    // 已废弃：请使用 geometry->drawArrays()
 }
 
 void Shader::set1i(const char *name, GLint v0) {
@@ -158,25 +152,15 @@ void Shader::setSampler(const char *name, GLuint texId) {
     TextureUnit++;
 }
 
-void Shader::setVertexData(float *vertices, size_t size) {
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, size, vertices);
-}
-
-void Shader::setVertexData() {
-    float vertices[] = {
-         1.0f,  1.0f, 0.0f, 1.0f,  1.0f, 
-         1.0f, -1.0f, 0.0f, 1.0f,  0.0f, 
-        -1.0f, -1.0f, 0.0f, 0.0f,  0.0f, 
-        -1.0f,  1.0f, 0.0f, 0.0f,  1.0f  
-    };
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-}
+// setVertexData已移除，请使用Geometry::setVertexData()或updateVertexData()
 
 float Shader::getDeltaTime() {
     float curTime = (float)glfwGetTime();
     float deltaTime = curTime - lastFrame;
     lastFrame = curTime;
     return deltaTime;
+}
+
+GLuint Shader::compileShader(const std::string& vertexShaderSource, const std::string& fragmentShaderSource) {
+    
 }

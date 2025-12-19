@@ -1,6 +1,6 @@
 #pragma once
 
-#include "src/Texture.h"
+#include "Texture.h"
 
 class FrameBuffer {
 public:
@@ -9,14 +9,15 @@ public:
     GLuint texColorBuffer;
     int width;
     int height;
-    FrameBuffer(const std::string& name) {
+    
+    FrameBuffer(const std::string& name, int w, int h) : width(w), height(h) {
         glGenFramebuffers(1, &FBO);
         glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 
         // 生成纹理
         glGenTextures(1, &texColorBuffer);
         glBindTexture(GL_TEXTURE_2D, texColorBuffer);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, screenWidth, screenHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glBindTexture(GL_TEXTURE_2D, 0);
@@ -25,20 +26,24 @@ public:
 
         // glGenRenderbuffers(1, &RBO);
         // glBindRenderbuffer(GL_RENDERBUFFER, RBO);
-        // glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, screenWidth, screenHeight);
+        // glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
         // glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
 
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
             std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
+    
     ~FrameBuffer() {}
+    
     GLuint getSampler() {
         return texColorBuffer;
     }
+    
     void bind() {
         glBindFramebuffer(GL_FRAMEBUFFER, FBO);
         // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         // glDisable(GL_DEPTH_TEST);
     }
 };
+

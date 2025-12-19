@@ -13,9 +13,6 @@
 #include "stb/stb_image.h"
 
 #include "glad/glad.h"
-#include "GLFW/glfw3.h"
-
-extern int screenWidth, screenHeight;
 
 class Texture {
 public:
@@ -23,13 +20,15 @@ public:
     int width;
     int height;
     int nrChannels;
-    Texture() {
+    
+    Texture(int w, int h) : width(w), height(h), nrChannels(4) {
         glGenTextures(1, &id);
         glBindTexture(GL_TEXTURE_2D, id);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, screenWidth, screenHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
         setTexParament(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_LINEAR, GL_LINEAR);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, id, 0);
     }
+    
     Texture(const char* filename) {
         glGenTextures(1, &id);
         glBindTexture(GL_TEXTURE_2D, id);

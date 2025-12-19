@@ -1,49 +1,54 @@
 #pragma once
 
-#include "src/Shader.h"
+#include <string>
+#include <unordered_map>
+#include <memory>
+#include "Resources/Shader.h"
+#include "Resources/FrameBuffer.h"
+#include "Resources/Texture.h"
+#include "Resources/Geometry.h"
+#include "Resources/ResourceManager.h"
 #include "MTFilterManager.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
+// 前向声明
+class Application;
+
 class MTFilter {
 public:
     MTFilter() = default;
-    virtual ~MTFilter() {
-        for (auto& it : m_ShaderList) { delete it.second; }
-        for (auto& it : m_FrameBufferList) { delete it.second; }
-        for (auto& it : m_TextureList) { delete it.second; }
+    virtual ~MTFilter() = default;
+
+    // 使用ResourceManager加载资源
+    std::shared_ptr<Shader> newShader(std::string name, const char* vert, const char* frag) {
+        return ResourceManager::Instance().LoadShader(name, vert, frag);
+    }
+    
+    std::shared_ptr<Shader> getShader(std::string name) {
+        return ResourceManager::Instance().GetShader(name);
     }
 
-    Shader* newShader(std::string name, const char* vert, const char* frag) {
-        Shader* shader = new Shader(vert, frag);
-        m_ShaderList[name] = shader;
-        return shader;
-    }
-    Shader* getShader(std::string name) {
-        return m_ShaderList[name];
+    std::shared_ptr<FrameBuffer> newFrameBuffer(std::string name);
+    
+    std::shared_ptr<FrameBuffer> getFrameBuffer(std::string name) {
+        return ResourceManager::Instance().GetFrameBuffer(name);
     }
 
-    FrameBuffer* newFrameBuffer(std::string name) {
-        FrameBuffer* framebuffer = new FrameBuffer{name};
-        m_FrameBufferList[name] = framebuffer;
-        return framebuffer;
+    std::shared_ptr<Texture> newTexture(std::string name, const char* filename) {
+        return ResourceManager::Instance().LoadTexture(name, filename);
     }
-    FrameBuffer* getFrameBuffer(std::string name) {
-        return m_FrameBufferList[name];
+    
+    std::shared_ptr<Texture> getTexture(std::string name) {
+        return ResourceManager::Instance().GetTexture(name);
     }
-
-    Texture* newTexture(std::string name, const char* filename) {
-        Texture* texture = new Texture{filename};
-        m_TextureList[name] = texture;
-        return texture;
+    
+    std::shared_ptr<Geometry> newGeometry(std::string name) {
+        return ResourceManager::Instance().CreateGeometry(name);
     }
-    Texture* getTexture(std::string name) {
-        return m_TextureList[name];
+    
+    std::shared_ptr<Geometry> getGeometry(std::string name) {
+        return ResourceManager::Instance().GetGeometry(name);
     }
-
-private:
-    std::unordered_map<std::string, Shader*> m_ShaderList;
-    std::unordered_map<std::string, FrameBuffer*> m_FrameBufferList;
-    std::unordered_map<std::string, Texture*> m_TextureList;
 };

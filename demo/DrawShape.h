@@ -1,6 +1,6 @@
 #pragma once
 
-#include "src/Shader.h"
+#include "src/Resources/Shader.h"
 // #include "src/Shader_old.h"
 
 #ifdef _WIN32

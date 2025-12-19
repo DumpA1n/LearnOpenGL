@@ -11,9 +11,9 @@
 
 #include "MMath.h"
 
-#include "src/Shader.h"
-#include "src/Camera.h"
-#include "src/Texture.h"
+#include "src/Resources/Shader.h"
+#include "src/Utils/Camera.h"
+#include "src/Resources/Texture.h"
 
 #include "src/Rectangle.h"
 

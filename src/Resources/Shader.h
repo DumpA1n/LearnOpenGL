@@ -1,13 +1,16 @@
 #pragma once
 
-#include "src/FrameBuffer.h"
+#include <string>
+#include <memory>
+#include "glad/glad.h"
+#include "GLFW/glfw3.h"
+
+class Texture;
+class Geometry;
 
 class Shader {
 public:
     GLuint program;
-    GLuint VBO;
-    GLuint VAO;
-    GLuint EBO;
     uint32_t TextureUnit;
     float lastFrame;
     float visibility = 0.2;
@@ -35,7 +38,10 @@ public:
     void setMatrix4fv(const char *name, const GLfloat *value);
     void setSampler(const char *name, const Texture* texture);
     void setSampler(const char *name, GLuint texId);
-    void setVertexData(float *vertices, size_t size = 80);
-    void setVertexData();
+    void draw(const Geometry* geometry) const;
+    void draw(const std::shared_ptr<Geometry>& geometry) const;
     float getDeltaTime();
+
+private:
+    GLuint compileShader(const std::string& vertexShaderSource, const std::string& fragmentShaderSource);
 };

@@ -22,14 +22,34 @@ include_directories(
     # ${CMAKE_SOURCE_DIR}/include/assimp
 )
 
-file(GLOB_RECURSE SOURCES
-    ${CMAKE_SOURCE_DIR}/src/main.cpp
-    ${CMAKE_SOURCE_DIR}/src/shader.cpp
-    ${CMAKE_SOURCE_DIR}/include/glad/*.c
-    ${CMAKE_SOURCE_DIR}/include/stb/*.cpp
+file(GLOB_RECURSE IMGUI_SOURCES
     ${CMAKE_SOURCE_DIR}/include/imgui/*.cpp
     ${CMAKE_SOURCE_DIR}/include/imgui/backends/*.cpp
 )
+
+file(GLOB_RECURSE STB_SOURCES
+    ${CMAKE_SOURCE_DIR}/include/stb/*.cpp
+)
+
+set(SOURCES
+    ${CMAKE_SOURCE_DIR}/src/main.cpp
+    ${CMAKE_SOURCE_DIR}/src/Core/Application.cpp
+    ${CMAKE_SOURCE_DIR}/src/Core/Renderer.cpp
+    ${CMAKE_SOURCE_DIR}/src/Resources/Shader.cpp
+    ${CMAKE_SOURCE_DIR}/src/Resources/Geometry.cpp
+    ${CMAKE_SOURCE_DIR}/src/Resources/ResourceManager.cpp
+    ${CMAKE_SOURCE_DIR}/src/Scene/Entity.cpp
+    ${CMAKE_SOURCE_DIR}/src/Scene/Transform.cpp
+    ${CMAKE_SOURCE_DIR}/src/Scene/MeshRenderer.cpp
+    ${CMAKE_SOURCE_DIR}/src/Scene/CameraComponent.cpp
+    ${CMAKE_SOURCE_DIR}/src/Scene/Scene.cpp
+    ${CMAKE_SOURCE_DIR}/src/MTFilter.cpp
+    ${CMAKE_SOURCE_DIR}/include/glad/glad.c
+    ${IMGUI_SOURCES}
+    ${STB_SOURCES}
+)
+
+message(STATUS "SOURCES: ${SOURCES}")
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
